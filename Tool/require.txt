@@ -1,0 +1,3 @@
+#requirements needed
+
+redis>=2.10.5
