@@ -1,21 +1,11 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
-from smali.emulator import Emulator
-
-emu = Emulator()
-
-filename = os.path.join( os.path.dirname(__file__), 'decryptor.smali' )
-
-# Arguments for the method.
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(filename), '..'))
+from smali.emulator import Emulatoremu = Emulator()
+filename = os.path.join( os.path.dirname(__file__), 'decryptor.smali' )  #decompile .DEX file
 args = {
-    'p0': (-62, -99, -106, -125, -123, -105, -98, -37, -105, -97, -103, -41, -118, -97, -113, -103, -109, -104, -115, 111, 98, 103, 35, 52),
-    'p1': 19
+    #add arguments according to your file
 }
-
-ret = emu.run_file( filename, args )
-
-print emu.stats
-
+output = emu.run_file( filename, args )
 print "RESULT:\n"
-print "'%s'" % ret
+print "'%s'" % output
