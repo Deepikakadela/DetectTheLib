@@ -1,0 +1,7 @@
+#following packages should be installed :
+
+Androguard tool : https://github.com/androguard/androguard
+Reverse engineering, Malware and goodware analysis of Android applications
+
+Apktool:  Already given in the repo
+A tool for reverse engineering Android apk files
