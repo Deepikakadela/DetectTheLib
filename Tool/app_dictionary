@@ -1,21 +1,7 @@
 import os.path
 import commands
-# ## import redis
+import redis
 import glob
-from _settings import *
-
-"""
-    Information about Database.
-    Redis is used here and the default setting points to localhost:6379
-    If your Redis IP and Port is different, you can change the value here.
-    In my redis.conf, I set 32 for the maximum number of databases.
-    What's the databases for?
-        0 : Android.jar Classes
-        1 : Android.jar APIs with return_type and arguments
-        2 : Android.jar APIs with only full class name and method name
-"""
-
-
 class Singleton(object):
     """
         Implementation for Singleton
@@ -36,17 +22,6 @@ class ApiDictionaryGenerator(Singleton):
             __init__
             Create connection to redis database.
             open a file for api output.
-        """
-        self.jar_list = []
-        # ## self.redis_class_name = redis.StrictRedis(host=DB_HOST, port=DB_PORT, db=DB_CLASS_NAME)
-        # ## logger.warning("Clean all the keys in databases")
-        # ## self.redis_class_name.flushdb()
-        # ## self.redis_android_api = redis.StrictRedis(host=DB_HOST, port=DB_PORT, db=DB_ANDROID_API)
-        # ## self.redis_android_api.flushdb()
-        # ## self.redis_android_api_simplified = redis.StrictRedis(host=DB_HOST, port=DB_PORT, db=DB_API_INVOKE)
-        # ## self.redis_android_api_simplified.flushdb()
-        # ## self.api_set = set()
-        # ## self.txt_output_api = open("./Data/IntermediateData/api.txt", 'w')
         self.api_simplified_set = set()
         self.txt_invoke_format = open(SCRIPT_PATH + "/Data/IntermediateData/invokeFormat.txt", 'w')
         self.ignore_list = [
@@ -114,53 +89,6 @@ class ApiDictionaryGenerator(Singleton):
             cmd = "./tool/jar_decompiler.sh " + jar
             os.popen(cmd)
 
-    """
-        Walk through the directories to find all the class names and methods (SDK API).
-    """
-    def walk_dir(self):
-        for jar in self.jar_list:
-            dir_to_be_walked = jar + ".dir"
-            logger.info("Walk %s" % dir_to_be_walked)
-            for dirName, subdirList, fileList in os.walk(dir_to_be_walked):
-                for filename in fileList:
-                    if len(filename) > 4 and filename[-5:] == ".java":
-                        full_path_name = '/'.join(dirName.split('/')[4:]) + '/' + filename
-                        class_name = full_path_name[:-5].replace('/', '.')
-                        '''
-                            Contents in inner class file like 'R$style.java' are already included in
-                                the parent class file. So we need to ignore the java file with symbol
-                                '$' in it.
-                        '''
-                        if '$' in full_path_name:
-                            continue
-                        self.read_java(full_path_name, class_name, jar)
-                        # ## self.redis_class_name.incr(class_name)
-            # clean the directory
-            if CLEAN_WORKSPACE:
-                logger.info("Cleaning the directory which is already walked.")
-                os.system('rm -rf %s' % dir_to_be_walked)
-        # ## logger.info("API Count is %d counting overloading." % len(self.api_set))
-        logger.info("API Count is %d without overloading." % len(self.api_simplified_set))
-        logger.info("Write the APIs into txt file as a backup.")
-        # ## for api in self.api_set:
-        # ##     self.txt_output_api.write(api + '\n')
-        api_simplified_list = list()
-        # Ignore those APIs that appears in ignore_list. Such as Landroid/util/Log
-        ignore_cnt = 0
-        for api_s in self.api_simplified_set:
-            flag = True
-            for ign_api in self.ignore_list:
-                if ign_api in api_s:
-                    flag = False
-                    break
-            if flag:
-                api_simplified_list.append(api_s)
-            else:
-                ignore_cnt += 1
-        logger.info("Ignore %d APIs" % ignore_cnt)
-        for api_s in sorted(api_simplified_list):
-            self.txt_invoke_format.write(api_s + '\n')
-
     def read_java(self, full_path_name, class_name, jar):
         """
             Read APIs from java file.
@@ -172,10 +100,13 @@ class ApiDictionaryGenerator(Singleton):
             # if the line is a comment.
             if len(line.strip()) > 2 and line.strip()[:2] == "//":
                 continue
+            if len(line.strip==Null)
+                print "error!!"
+                break
             if '{' in line:
-                brackets_count += 1
+                count_bracket += 1
             if '}' in line:
-                brackets_count -= 1
+                count_brackets -= 1
             # outer class
             if ('public' in line or 'protected' in line) and 'class' in line and brackets_count == 0:
                 continue
