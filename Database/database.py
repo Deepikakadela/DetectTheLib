@@ -33,11 +33,11 @@ if __name__=="__main__":
             temp=name[:name.find("==")]
             if libname==temp:
                 libcount+=1
-        print libname,libcount
+        print "name of the library and count of libraries:" libname,libcount
         tempstr=''
         tempstr+=libname+"==>"
         tempstr+=str(libcount)
-        #print tempstr
+        print tempstr
         countset.add(tempstr)
     countlist=list(countset)
     for purlib in countlist:
